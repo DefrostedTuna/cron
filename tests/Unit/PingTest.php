@@ -24,4 +24,23 @@ class PingTest extends TestCase
     {
         $this->assertInstanceOf(Monitor::class, $this->ping->monitor);
     }
+
+    /** @test */
+    public function a_ping_can_have_a_pair()
+    {
+        $runPing = create(Ping::class, [
+            'endpoint' => 'run',
+        ]);
+
+        $completePing = create(Ping::class, [
+            'monitor_id' => $runPing->monitor_id,
+            'pair_id' => $runPing->id,
+            'endpoint' => 'complete'
+        ]);
+
+        $runPing->pair()->associate($completePing)->save();
+
+        $this->assertInstanceOf(Ping::class, $runPing->pair);
+        $this->assertInstanceOf(Ping::class, $completePing->pair);
+    }
 }

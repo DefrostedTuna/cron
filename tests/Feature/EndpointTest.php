@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Ping;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Monitor;
@@ -64,8 +65,23 @@ class EndpointTest extends TestCase
         ]);
         $ping = (json_decode($response->getContent()))->ping;
         $this->assertDatabaseHas('pings', [
-            'id' => $ping->id
+            'id' => $ping->id,
         ]);
+    }
+
+    /** @test */
+    public function the_complete_endpoint_will_create_a_pair_with_the_last_run_ping()
+    {
+        $runPing = create(Ping::class, [
+            'monitor_id' => $this->monitor->id,
+            'endpoint' => 'run',
+        ]);
+
+        $completeEndpoint = $this->json('GET', '/m/' . $this->monitor->shortcode . '/complete');
+        $completePing = (json_decode($completeEndpoint->getContent()))->ping;
+
+        $this->assertEquals($runPing->id, $completePing->pair_id);
+        $this->assertEquals($runPing->fresh()->pair_id, $completePing->id);
     }
 
     /** @test */

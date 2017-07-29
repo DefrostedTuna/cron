@@ -73,6 +73,7 @@ $factory->define(App\Models\Ping::class, function (Faker\Generator $faker) {
         'monitor_id' => function () {
             return factory(App\Models\Monitor::class)->create()->id;
         },
+        'pair_id' => null,
         'type' => 'incoming',
         'status' => 'success',
         'endpoint' => $endpoints[array_rand($endpoints)],

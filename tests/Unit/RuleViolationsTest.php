@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use App\Models\Ping;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Monitor;
@@ -51,6 +52,45 @@ class RuleViolationsTest extends TestCase
         ]);
 
         $this->assertTrue($monitor->verifyCronDidNotCompleteViolation());
+    }
+
+    /** @test */
+    public function it_verifies_that_a_cron_ran_longer_than_usual()
+    {
+        $monitor = create(Monitor::class, [
+            'name' => 'Verify',
+            'shortcode' => '123',
+            'expression' => '* * * * *',
+            'type' => 'cron',
+        ]);
+
+        $runPingOne = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'endpoint' => 'run',
+            'created_at' => Carbon::now()->subMinutes(1)
+        ]);
+        $completePingOne = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'pair_id' => $runPingOne->id,
+            'endpoint' => 'complete',
+            'created_at' => Carbon::now()->subMinutes(1)->addSeconds(10)
+        ]);
+        $runPingOne->pair()->associate($completePingOne)->save();
+
+        $runPingTwo = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'endpoint' => 'run',
+            'created_at' => Carbon::now()
+        ]);
+        $completePingTwo = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'pair_id' => $runPingTwo->id,
+            'endpoint' => 'complete',
+            'created_at' => Carbon::now()->addSeconds(30)
+        ]);
+        $runPingTwo->pair()->associate($completePingTwo)->save();
+
+        $this->assertTrue($monitor->verifyCronRanLongerThanUsualViolation());
     }
 
     /** @test */

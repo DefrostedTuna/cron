@@ -31,6 +31,11 @@ class User extends Authenticatable
 
     public function slackIntegrations()
     {
-        return $this->hasMany(\App\Models\SlackIntegration::class);
+        return $this->hasMany(SlackIntegration::class);
+    }
+
+    public function emailIntegrations()
+    {
+        return $this->hasMany(EmailIntegration::class);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Tests\Unit;
 
+use App\Models\Ping;
+use App\Notifications\CronRanLongerThanUsual;
 use Carbon\Carbon;
 use Tests\TestCase;
 use App\Models\Monitor;
@@ -131,6 +133,59 @@ class NotificationTest extends TestCase
         Notification::assertSentTo(
             $monitor->notificationChannels,
             CronDidNotComplete::class
+        );
+    }
+
+    /** @test */
+    public function notification_is_sent_when_a_cron_runs_longer_than_usual()
+    {
+        Notification::fake(); // Prevent notifications from being sent
+
+        // Create the monitor and the notification channel
+        $monitor = create(Monitor::class, [
+            'type' => 'cron',
+            'expression' => '* * * * *'
+        ]);
+        $notificationChannel = create(NotificationChannel::class, [
+            'monitor_id' => $monitor->id
+        ]);
+
+        // Make a failed condition to trigger the rule violation
+        $runPingOne = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'endpoint' => 'run',
+            'created_at' => Carbon::now()->subMinutes(1)
+        ]);
+        $completePingOne = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'pair_id' => $runPingOne->id,
+            'endpoint' => 'complete',
+            'created_at' => Carbon::now()->subMinutes(1)->addSeconds(10)
+        ]);
+        $runPingOne->pair()->associate($completePingOne)->save();
+
+        $runPingTwo = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'endpoint' => 'run',
+            'created_at' => Carbon::now()
+        ]);
+        $completePingTwo = create(Ping::class, [
+            'monitor_id' => $monitor->id,
+            'pair_id' => $runPingTwo->id,
+            'endpoint' => 'complete',
+            'created_at' => Carbon::now()->addSeconds(30)
+        ]);
+        $runPingTwo->pair()->associate($completePingTwo)->save();
+
+        // Rule should fail, triggering the notification
+        if($monitor->verifyCronRanLongerThanUsualViolation()) {
+            $monitor->notifyChildren(new CronRanLongerThanUsual($monitor));
+        }
+
+        // Verify that the notification was sent
+        Notification::assertSentTo(
+            $monitor->notificationChannels,
+            CronRanLongerThanUsual::class
         );
     }
 

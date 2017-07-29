@@ -16,7 +16,6 @@ class CreateMonitorRuleTable extends Migration
         Schema::create('monitor_rule', function (Blueprint $table) {
             $table->unsignedInteger('monitor_id');
             $table->unsignedInteger('rule_id');
-            $table->timestamps();
 
             $table->primary(['monitor_id', 'rule_id']);
         });

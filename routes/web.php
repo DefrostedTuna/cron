@@ -19,36 +19,6 @@ Route::get('/m/{monitor_shortcode}/run')->name('endpoints.run')->uses('EndpointC
 Route::get('/m/{monitor_shortcode}/complete')->name('endpoints.complete')->uses('EndpointController@completeEndpoint');
 Route::get('/m/{monitor_shortcode}/heartbeat')->name('endpoints.heartbeat')->uses('EndpointController@heartbeatEndpoint');
 
-//Route::get('/m/{monitor_shortcode}/run', function(\App\Models\Monitor $monitor) {
-//
-//    $ping = $monitor->pings()->create([
-//        'type' => 'incoming',
-//        'status' => 'success',
-//        'endpoint' => 'run',
-//        'ip' => request()->ip()
-//    ]);
-//
-//    return response()->json([
-//        'status' => 'ok',
-//        'ping' => $ping
-//    ], 200);
-//});
-
-//Route::get('/m/{monitor_shortcode}/complete', function(\App\Models\Monitor $monitor) {
-//
-//    $ping = $monitor->pings()->create([
-//        'type' => 'incoming',
-//        'status' => 'success',
-//        'endpoint' => 'complete',
-//        'ip' => request()->ip()
-//    ]);
-//
-//    return response()->json([
-//        'status' => 'ok',
-//        'ping' => $ping
-//    ], 200);
-//});
-
 Route::get('slack/oauth', function() {
 
     // Set up the request information based on the App credentials

@@ -44,8 +44,6 @@ class Monitor extends Model
         return $this->hasMany(NotificationChannel::class);
     }
 
-    // Notifications via Notifiable trait.
-
     /**
      * Methods
      */
@@ -90,6 +88,7 @@ class Monitor extends Model
 
     public function lastExpectedRunDate()
     {
+        // TODO: Place adjusted run date here with a toggle param?
         return Carbon::instance($this->expressionInstance()->getPreviousRunDate());
     }
 
@@ -101,6 +100,7 @@ class Monitor extends Model
 
     public function nextExpectedRunDate()
     {
+        // TODO: Place adjusted run date here with a toggle param?
         return Carbon::instance($this->expressionInstance()->getNextRunDate());
     }
 
