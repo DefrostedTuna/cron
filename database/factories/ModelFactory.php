@@ -61,7 +61,6 @@ $factory->define(App\Models\Monitor::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Models\Ping::class, function (Faker\Generator $faker) {
-
     $endpoints = [
         'run',
         'complete',
@@ -77,12 +76,11 @@ $factory->define(App\Models\Ping::class, function (Faker\Generator $faker) {
         'type' => 'incoming',
         'status' => 'success',
         'endpoint' => $endpoints[array_rand($endpoints)],
-        'ip' => $faker->ipv4
+        'ip' => $faker->ipv4,
     ];
 });
 
 $factory->define(App\Models\NotificationChannel::class, function (Faker\Generator $faker) {
-
     $integrations = [
         App\Models\EmailIntegration::class,
         App\Models\SmsIntegration::class,
@@ -92,16 +90,16 @@ $factory->define(App\Models\NotificationChannel::class, function (Faker\Generato
     $integration = $integrations[array_rand($integrations)];
 
     return [
-        'monitor_id' => function() {
+        'monitor_id' => function () {
             return factory(App\Models\Monitor::class)->create()->id;
         },
-        'integration_id' => function() use ($integration) {
+        'integration_id' => function () use ($integration) {
             return factory($integration)->create()->id;
         },
-        'integration_type' => function() use ($integration) {
+        'integration_type' => function () use ($integration) {
             return $integration;
         },
-        'type' => function() use ($integration) {
+        'type' => function () use ($integration) {
             return class_basename(new $integration);
         },
     ];
@@ -109,16 +107,16 @@ $factory->define(App\Models\NotificationChannel::class, function (Faker\Generato
 
 $factory->define(App\Models\EmailIntegration::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => function() {
+        'user_id' => function () {
             return factory(App\Models\User::class)->create()->id;
         },
-        'email' => $faker->email
+        'email' => $faker->email,
     ];
 });
 
 $factory->define(App\Models\SmsIntegration::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => function() {
+        'user_id' => function () {
             return factory(App\Models\User::class)->create()->id;
         },
         'sms_number' => $faker->phoneNumber,
@@ -127,14 +125,14 @@ $factory->define(App\Models\SmsIntegration::class, function (Faker\Generator $fa
 
 $factory->define(App\Models\SlackIntegration::class, function (Faker\Generator $faker) {
     return [
-        'user_id' => function() {
+        'user_id' => function () {
             return factory(App\Models\User::class)->create()->id;
         },
         'access_token' => $faker->text(76),
         'team_name' => $faker->word,
         'team_id' => str_random(9),
         'webhook_channel_id' => str_random(9),
-        'webhook_channel_name' => '#' . $faker->word,
+        'webhook_channel_name' => '#'.$faker->word,
         'webhook_config_url' => $faker->url,
         'webhook_url' => $faker->url,
     ];

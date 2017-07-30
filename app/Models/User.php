@@ -10,7 +10,6 @@ class User extends Authenticatable
 {
     use Notifiable, RecordsActivity;
 
-
     /**
      * The attributes that are mass assignable.
      *

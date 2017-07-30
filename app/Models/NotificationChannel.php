@@ -26,11 +26,11 @@ class NotificationChannel extends Model
         $spaced = str_replace('_', ' ', snake_case($this->type));
         $type = explode(' ', $spaced)[0]; // Return first word
 
-        if ($type == 'email') {
+        if ($type === 'email') {
             return 'mail';
         }
 
-        if ($type == 'sms') {
+        if ($type === 'sms') {
             return 'neximo';
         }
 
@@ -39,16 +39,16 @@ class NotificationChannel extends Model
 
     public function routeNotificationForSlack()
     {
-        return $this->type == 'SlackIntegration' ? $this->integration->webhook_url : null;
+        return $this->type === 'SlackIntegration' ? $this->integration->webhook_url : null;
     }
 
     public function routeNotificationForMail()
     {
-        return $this->type == 'EmailIntegration' ? $this->integration->email : null;
+        return $this->type === 'EmailIntegration' ? $this->integration->email : null;
     }
 
     public function routeNotificationForNeximo()
     {
-        return $this->type == 'SmsIntegration' ? $this->integration->sms_number : null;
+        return $this->type === 'SmsIntegration' ? $this->integration->sms_number : null;
     }
 }

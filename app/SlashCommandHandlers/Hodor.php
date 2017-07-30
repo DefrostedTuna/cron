@@ -27,6 +27,6 @@ class Hodor extends BaseHandler
      */
     public function handle(Request $request): Response
     {
-        return $this->respondToSlack("Hodor, hodor...");
+        return $this->respondToSlack('Hodor, hodor...');
     }
 }

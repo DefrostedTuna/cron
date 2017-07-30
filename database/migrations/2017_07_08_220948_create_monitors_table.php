@@ -25,7 +25,6 @@ class CreateMonitorsTable extends Migration
             $table->boolean('alert_sent');
             $table->timestamp('delay_until')->nullable();
             $table->timestamps();
-
         });
     }
 

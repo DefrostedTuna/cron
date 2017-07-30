@@ -21,7 +21,7 @@ trait VerifiesRuleViolations
 //            return $this->violatesRule($var);
 //        }
 
-        $functionName = 'verify' . studly_case($rule->name) . 'Violation';
+        $functionName = 'verify'.studly_case($rule->name).'Violation';
 
         // TODO: Check if function exists before firing.
         return $this->{$functionName}();

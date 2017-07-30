@@ -32,9 +32,9 @@ class EvaluateRuleViolations implements ShouldQueue
      */
     public function handle()
     {
-        foreach($this->monitor->rules as $rule) {
+        foreach ($this->monitor->rules as $rule) {
             if ($this->monitor->violatesRule($rule)) {
-                $brokenRuleNotification = "\\App\\Notifications\\" . studly_case($rule->name);
+                $brokenRuleNotification = '\\App\\Notifications\\'.studly_case($rule->name);
                 $this->monitor->notifyChildren(new $brokenRuleNotification($this->monitor));
                 // TODO: Also broadcast event? Yeah, that'd be cool
                 break; // Prevent sending of multiple notifications
