@@ -16,7 +16,6 @@ class Ping extends Model
 
     public function pair()
     {
-        return $this->belongsto(Ping::class, 'pair_id');
+        return $this->belongsto(self::class, 'pair_id');
     }
-
 }

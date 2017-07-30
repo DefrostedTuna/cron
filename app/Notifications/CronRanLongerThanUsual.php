@@ -77,7 +77,7 @@ class CronRanLongerThanUsual extends Notification
     {
         return [
             'status' => 'Did not run',
-            'One' => 'Two'
+            'One' => 'Two',
         ];
     }
 }

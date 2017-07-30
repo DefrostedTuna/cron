@@ -77,7 +77,7 @@ class CronDidNotRun extends Notification implements ShouldQueue
     {
         return [
             'status' => 'Did not run',
-            'One' => 'Two'
+            'One' => 'Two',
         ];
     }
 }

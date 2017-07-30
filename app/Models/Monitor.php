@@ -22,7 +22,7 @@ class Monitor extends Model
     protected $guarded = [];
 
     /**
-     * Relationships
+     * Relationships.
      */
     public function owner()
     {
@@ -45,9 +45,8 @@ class Monitor extends Model
     }
 
     /**
-     * Methods
+     * Methods.
      */
-
     public function isDue()
     {
         return $this->expressionInstance()->isDue();
@@ -72,7 +71,7 @@ class Monitor extends Model
 
         return $ping->orderBy('created_at', 'desc')->first();
     }
-    
+
     public function lastPingDate($endpoint = null, $type = null)
     {
         return $this->lastPing($endpoint, $type)->created_at;
@@ -81,8 +80,8 @@ class Monitor extends Model
     // Move this to a rules class?
     public function lastExpectedEndpoint()
     {
-        if ($this->type == 'cron') {
-            return $this->lastPing()->endpoint == 'run' ? 'complete' : 'run';
+        if ($this->type === 'cron') {
+            return $this->lastPing()->endpoint === 'run' ? 'complete' : 'run';
         }
     }
 

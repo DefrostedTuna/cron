@@ -77,7 +77,7 @@ class CronDidNotComplete extends Notification implements ShouldQueue
     {
         return [
             'status' => 'Did not complete',
-            'One' => 'Two'
+            'One' => 'Two',
         ];
     }
 }

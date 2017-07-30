@@ -8,7 +8,9 @@ trait RecordsActivity
 {
     public static function bootRecordsActivity()
     {
-        if (auth()->guest()) return;
+        if (auth()->guest()) {
+            return;
+        }
 
         foreach (static::getRecordableEvents() as $event) {
             static::$event(function ($model) use ($event) {
@@ -30,6 +32,7 @@ trait RecordsActivity
             'subject_type' => get_class($this),
             'name' => $this->getActivityName($this, $event),
         ]);
+
         return true;
     }
 

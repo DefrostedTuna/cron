@@ -19,26 +19,27 @@ Route::get('/m/{monitor_shortcode}/run')->name('endpoints.run')->uses('EndpointC
 Route::get('/m/{monitor_shortcode}/complete')->name('endpoints.complete')->uses('EndpointController@completeEndpoint');
 Route::get('/m/{monitor_shortcode}/heartbeat')->name('endpoints.heartbeat')->uses('EndpointController@heartbeatEndpoint');
 
-Route::get('slack/oauth', function() {
+Route::get('slack/oauth', function () {
 
     // Set up the request information based on the App credentials
     $provider = new \AdamPaterson\OAuth2\Client\Provider\Slack([
         'clientId' => '194805650644.212120582757',
         'clientSecret' => '1aa32b0c3edf38d5017f1accae2781f3',
-        'redirectUri' => 'https://cron.localtunnel.me/slack/oauth' // Redirect back here after sending a request
+        'redirectUri' => 'https://cron.localtunnel.me/slack/oauth', // Redirect back here after sending a request
     ]);
 
     // If no 'code' parameter was passed to the request, redirect and get one, then get sent back here
-    if (!request()->query('code')) {
+    if (! request()->query('code')) {
         $authUrl = $provider->getAuthorizationUrl([
-            'scope' => 'incoming-webhook,commands' // Permissions the App needs to access from Slack
+            'scope' => 'incoming-webhook,commands', // Permissions the App needs to access from Slack
         ]);
+
         return redirect()->away($authUrl);
     }
 
     // Fetch the oauth.access method and return the response to the $token variable (The User info from Slack)
     $token = $provider->getAccessToken('authorization_code', [
-        'code' => request()->query('code')
+        'code' => request()->query('code'),
     ]);
 
     $user = \App\Models\User::first(); // Grab the first user because yolo, and no login system is built yet

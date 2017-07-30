@@ -3,10 +3,10 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Messages\SlackMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Notifications\Messages\SlackMessage;
 
 class IncomingHeartbeatDidNotComplete extends Notification implements ShouldQueue
 {
@@ -53,7 +53,7 @@ class IncomingHeartbeatDidNotComplete extends Notification implements ShouldQueu
     public function toSlack($notifiable)
     {
         // TODO: Style slack message
-        return (new SlackMessage);
+        return new SlackMessage;
     }
 
     public function toParentDatabase()

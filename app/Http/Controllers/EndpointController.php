@@ -9,7 +9,7 @@ class EndpointController extends Controller
 {
     public function runEndpoint(Monitor $monitor)
     {
-        if ($monitor->type != 'cron') {
+        if ($monitor->type !== 'cron') {
             abort(404); // Prevent cross-types
         }
 
@@ -17,18 +17,18 @@ class EndpointController extends Controller
             'type' => 'incoming',
             'status' => 'success',
             'endpoint' => 'run',
-            'ip' => request()->ip()
+            'ip' => request()->ip(),
         ]);
 
         return response()->json([
             'status' => 'success', // TODO: Maybe change this to 'ok'?
-            'ping' => $ping
+            'ping' => $ping,
         ], 200);
     }
 
     public function completeEndpoint(Monitor $monitor)
     {
-        if ($monitor->type != 'cron') {
+        if ($monitor->type !== 'cron') {
             abort(404); // Prevent cross-types.
         }
 
@@ -39,7 +39,7 @@ class EndpointController extends Controller
             'type' => 'incoming',
             'status' => 'success',
             'endpoint' => 'complete',
-            'ip' => request()->ip()
+            'ip' => request()->ip(),
         ]);
 
         // If monitor has a run ping, associate the complete ping with it.
@@ -53,14 +53,14 @@ class EndpointController extends Controller
 
         return response()->json([
             'status' => 'success', // TODO: Maybe change this to 'ok'?
-            'ping' => $ping->load('pair')
+            'ping' => $ping->load('pair'),
         ], 200);
     }
 
     public function heartbeatEndpoint(Monitor $monitor)
     {
         // TODO: Change name to incoming-heartbeat?
-        if ($monitor->type != 'heartbeat') {
+        if ($monitor->type !== 'heartbeat') {
             abort(404); // Prevent cross-types
         }
 
@@ -68,7 +68,7 @@ class EndpointController extends Controller
             'type' => 'incoming',
             'status' => 'success',
             'endpoint' => 'heartbeat',
-            'ip' => request()->ip()
+            'ip' => request()->ip(),
         ]);
 
         // Reset notifications
@@ -77,7 +77,7 @@ class EndpointController extends Controller
 
         return response()->json([
             'status' => 'success', // TODO: Maybe change this to 'ok'?
-            'ping' => $ping
+            'ping' => $ping,
         ], 200);
     }
 }
